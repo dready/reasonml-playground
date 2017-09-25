@@ -9,6 +9,7 @@ module Timer = {
     | Pausing
     | Stopped;
   type historyItem = {
+    id: int,
     action,
     time: float
   };
@@ -27,7 +28,10 @@ module Timer = {
   let make _children => {
     let historyHelper state action => {
       ...state,
-      history: [{action, time: Js_date.now ()}, ...state.history]
+      history: [
+        {id: List.length state.history + 1, action, time: Js_date.now ()},
+        ...state.history
+      ]
     };
     let start _event => Start;
     let stop _event => Stop;
@@ -79,7 +83,7 @@ module Timer = {
                fun historyItem => {
                  let timeString: string =
                    Js_date.toTimeString (Js_date.fromFloat historyItem.time);
-                 <li>
+                 <li key=(string_of_int historyItem.id)>
                    (
                      ReasonReact.stringToElement (
                        timeString ^ ": " ^ action2String historyItem.action
