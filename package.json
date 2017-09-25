@@ -1,0 +1,25 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "bsb -make-world && webpack",
+    "dev": "bsb -w",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bs-director": "^0.0.4",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "reason-react": "^0.2.4"
+  },
+  "devDependencies": {
+    "bs-platform": "^1.9.2",
+    "webpack": "^1.14.0"
+  }
+}
