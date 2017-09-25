@@ -25,8 +25,10 @@ module Timer = {
     };
   let component = ReasonReact.reducerComponent "Timer";
   let make _children => {
-    let historyHelper state action mode =>
-      ReasonReact.Update {mode, history: [{action, time: Js_date.now ()}, ...state.history]};
+    let historyHelper state action => {
+      ...state,
+      history: [{action, time: Js_date.now ()}, ...state.history]
+    };
     let start _event => Start;
     let stop _event => Stop;
     let pause _event => Pause;
@@ -34,13 +36,15 @@ module Timer = {
     {
       ...component,
       initialState: fun () => {mode: Stopped, history: []},
-      reducer: fun action state =>
+      reducer: fun action state => {
+        let newState = historyHelper state action;
         switch action {
-        | Start => historyHelper state action Running
-        | Pause => historyHelper state action Pausing
-        | Resume => historyHelper state action Running
-        | Stop => historyHelper state action Stopped
-        },
+        | Start => ReasonReact.Update {...newState, mode: Running}
+        | Pause => ReasonReact.Update {...newState, mode: Pausing}
+        | Resume => ReasonReact.Update {...newState, mode: Running}
+        | Stop => ReasonReact.Update {...newState, mode: Stopped}
+        }
+      },
       render: fun {state, reduce} => {
         let buttons =
           switch state.mode {
